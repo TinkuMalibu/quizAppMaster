@@ -1,0 +1,21 @@
+.choice-container {
+  display: flex;
+  margin-bottom: 0.5rem;
+  width:100%;
+  font-size: 1.8rem;
+  border: 0.1rem solid rgba(160, 201, 237, 0.25);
+  background-color: white;
+}
+
+.choice-container:hover {
+  background-color: rgba(42, 115, 179, 0.25);
+}
+.choice-prefix {
+  padding: 1.5rem 2.5rem;
+  background-color: rgba(50, 79, 105, 0.25);
+  color: white;
+}
+
+.choice-text {
+  padding: 1.5rem;
+}
