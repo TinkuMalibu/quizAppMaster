@@ -1,5 +1,8 @@
 const question = document.getElementById('question');
 const choices = Array.from(document.getElementsByClassName('choice-text'));
+const progressText= document.getElementById('progressText');
+const scoreText = document.getElementById('score');
+const progressBarFull = document.getElementById('progressBarFull');
 
 let currentQuestion = {};
 let acceptingAnswers = false;
@@ -53,6 +56,11 @@ getNewQuestion = () => {
     return window.location.assign('/end.html');
   }
   questionCounter++; // when the quiz starts, the question counter is 0, so we need to increment it by 1
+  progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`; // this will display the question counter on the screen
+  // update the progress bar
+  console.log((questionCounter / MAX_QUESTIONS) * 100);
+  progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`; // this will update the progress bar
+
   let questionIndex = Math.floor(Math.random() * availableQuestions.length);
   currentQuestion = availableQuestions[questionIndex]; // this will give us a random question from the available questions
   question.innerText = currentQuestion.question; // this will display the question on the screen
@@ -77,6 +85,10 @@ choices.forEach(choice => {
     const classToApply =
     selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
 
+    if (classToApply === 'correct') {
+      incrementScore(CORRECT_BONUS);
+    }
+
     selectedChoice.parentElement.classList.add(classToApply);
 
     setTimeout(() => {
@@ -85,5 +97,10 @@ choices.forEach(choice => {
     }, 1000);
   });
 });
+
+incrementScore = (num) => {
+  score += num;
+  scoreText.innerText = score;
+}
 
 startGame();
