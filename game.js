@@ -53,6 +53,7 @@ startGame = () => {
 getNewQuestion = () => {
   if (availableQuestions.length === 0 || questionCounter >= MAX_QUESTIONS) {
     // go to the end page
+    localStorage.setItem('mostRecentScore', score);
     return window.location.assign('/end.html');
   }
   questionCounter++; // when the quiz starts, the question counter is 0, so we need to increment it by 1
