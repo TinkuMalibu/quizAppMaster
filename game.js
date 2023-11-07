@@ -12,13 +12,26 @@ let availableQuestions = [];
 
 let questions = []; // this will be an empty array that will hold the questions
 
-fetch("questions.json").then(res => {
+fetch("https://opentdb.com/api.php?amount=10&category=25&type=multiple")
+.then(res => {
   return res.json(); // this will return the response in json format
 })
 .then(loadedQuestions => {
-  console.log(loadedQuestions);
-  questions = loadedQuestions;
-  startGame();
+  console.log(loadedQuestions.results);
+  loadedQuestions.results.map(loadedQuestion => {
+    const formattedQuestions = {
+      question: loadedQuestion.question
+    }
+    const answerChoices = [...loadedQuestion.incorrect_answers]; // this will spread the incorrect answers into the answer choices array
+    formattedQuestions.answer = Math.floor(Math.random() * 3) + 1; // this will give us a random number between 1 and 3
+    answerChoices.splice(formattedQuestions.answer - 1, 0, loadedQuestion.correct_answer); // this will insert the correct answer into the answer choices array
+    answerChoices.forEach((choice, index) => {
+      formattedQuestions['choice' + (index + 1)] = choice;
+    })
+    return formattedQuestions;
+  });
+  //questions = loadedQuestions;
+  //startGame();
 }) // this will fetch the questions from the json file
 .catch(err =>{
   console.error(err);
