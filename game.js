@@ -3,6 +3,9 @@ const choices = Array.from(document.getElementsByClassName('choice-text'));
 const progressText= document.getElementById('progressText');
 const scoreText = document.getElementById('score');
 const progressBarFull = document.getElementById('progressBarFull');
+const loader = document.getElementById('loader');
+const game = document.getElementById('game');
+
 
 let currentQuestion = {};
 let acceptingAnswers = false;
@@ -18,20 +21,28 @@ fetch("https://opentdb.com/api.php?amount=10&category=25&type=multiple")
 })
 .then(loadedQuestions => {
   console.log(loadedQuestions.results);
-  loadedQuestions.results.map(loadedQuestion => {
-    const formattedQuestions = {
+  questions = loadedQuestions.results.map(loadedQuestion => {
+    const formattedQuestion = {
       question: loadedQuestion.question
-    }
+    };
     const answerChoices = [...loadedQuestion.incorrect_answers]; // this will spread the incorrect answers into the answer choices array
-    formattedQuestions.answer = Math.floor(Math.random() * 3) + 1; // this will give us a random number between 1 and 3
-    answerChoices.splice(formattedQuestions.answer - 1, 0, loadedQuestion.correct_answer); // this will insert the correct answer into the answer choices array
-    answerChoices.forEach((choice, index) => {
-      formattedQuestions['choice' + (index + 1)] = choice;
-    })
-    return formattedQuestions;
+    formattedQuestion.answer = Math.floor(Math.random() * 3) + 1; // this will give us a random number between 1 and 3
+    answerChoices.splice(
+      formattedQuestion.answer - 1,
+      0,
+      loadedQuestion.correct_answer
+      ); // this will insert the correct answer into the answer choices array
+
+      answerChoices.forEach((choice, index) => {
+        formattedQuestion['choice' + (index + 1)] = choice;
+
+    });
+
+
+    return formattedQuestion;
   });
-  //questions = loadedQuestions;
-  //startGame();
+
+  startGame();
 }) // this will fetch the questions from the json file
 .catch(err =>{
   console.error(err);
@@ -40,13 +51,15 @@ fetch("https://opentdb.com/api.php?amount=10&category=25&type=multiple")
 //CONSTANTS
 
 const CORRECT_BONUS = 10;
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 10;
 
 startGame = () => {
   questionCounter = 0;
   score = 0;
   availableQuestions = [...questions]; // spread operator
   getNewQuestion();
+  game.classList.remove('hidden');
+  loader.classList.add('hidden');
 
 };
 
